@@ -1,24 +1,31 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect } from 'react';
+import { Admin, Resource  } from 'react-admin';
+import { UserList, UserEdit } from './users.js';
+import jsonServerProvider from 'ra-data-json-server';
+import simpleRestProvider from 'ra-data-simple-rest';
 
-function App() {
+const dataProvider = jsonServerProvider('https://jsonplaceholder.typicode.com');
+
+//const dataProvider = simpleRestProvider('http://3.65.149.62');
+
+const App = () => {
+  fetch('http://3.65.149.62/test-api/auth/login', {
+    method: 'POST',
+    headers: {
+      'content-Type': 'application/json',
+     },
+    body: JSON.stringify({
+      email: "test@nyblecraft.com",
+      password: "12345678qQ"
+    })
+  })
+  .then(res => console.log(res))
+  .catch(err => console.log(err));
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Admin dataProvider={dataProvider}>
+      <Resource name='users' list={UserList} edit={UserEdit} />
+    </Admin>
   );
 }
 
